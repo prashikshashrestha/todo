@@ -1,64 +1,64 @@
-export const createTodoHandler=async(req,res)=>{
-try{
-	const {todoTitle,todoDescription}=req.body;
-	 if(!todoTitle||todoDescription) throw new Error("empty fields are not accepted")
+import db from "../config/db.js";
+export const createTodoHandler = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title) throw new Error("empty fields are not accepted");
+    const [result] = await db.query(
+      "INSERT INTO todos (title, description) VALUES (?, ?)",
+      [title, description],
+    );
+    if (!result)
+      throw new Error("Unable to create todo , Internal server Error");
 
-	 const [result] = await db.query(
-		"INSERT INTO todos (todoTitle, todoDescription) VALUES (?, ?)",
-		[todoTitle, todoDescription]
-	);
+    return res.status(200).json({
+      success: true,
+      messsage: "todo created successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log("error");
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      messsage: "err while creating todo",
+      error,
+    });
+  }
+};
+export const updateTodoHandler = async (req, res) => {
+  try {
+    // console.log(req);
+    const { id } = req.params;
+    const { title, description } = req.body;
+    if (!title || !description)
+      throw new Error("empty fields are not accepted");
 
-     if(!result) throw new Error("Unable to create todo , Internal server Error")
+    const [result] = await db.query(
+      "UPDATE todos SET title = ?, description = ? WHERE id = ?",
+      [title, description, id],
+    );
+    if (!result)
+      throw new Error("Unable to update todo , Internal server Error");
 
-     return res.status(200).json({
-	     success:true,
-	     messsage:"todo created successfully",
-	     data:result
-     })
-}catch(error){
-	console.log("error")
-	console.error(error)
-	return res.status(500).json({
-		success:true,
-	     messsage:"todo created successfully"
-	})
-}
-
-}
-export const updateTodoHandler=async(req,res)=>{
-try{
-	const {todoTitle,todoDescription,status}=req.body;
-	 if(!todoTitle||!todoDescription||!status) throw new Error("empty fields are not accepted")
-
-	 const [result] = await db.query(  
-		"INSERT INTO users (todoTitle, todoDescription,status) VALUES (?, ?)",  
-		[todoTitle, todoDescription,status]  
-	);
-
-     if(!result) throw new Error("Unable to update todo , Internal server Error")
-
-     return res.status(200).json({
-	     success:true,
-	     messsage:"todo updated successfully",
-	     data:result
-     })
-}catch(error){
-	console.log("error")
-	console.error(error)
-	return res.status(500).json({
-		success:true,
-	     messsage:"todo updated successfully"
-	})
-}
-}
+    return res.status(200).json({
+      success: true,
+      messsage: "todo updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log("error");
+    console.error(error);
+    return res.status(500).json({
+      success: true,
+      messsage: "todo updated successfully",
+    });
+  }
+};
 export const deleteTodoHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [result] = await db.query(
-      "DELETE FROM todos WHERE id=?",
-      [id]
-    );
+    const [result] = await db.query("DELETE FROM todos WHERE id=?", [id]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({
@@ -80,7 +80,6 @@ export const deleteTodoHandler = async (req, res) => {
   }
 };
 
-
 export const getTodosHandler = async (req, res) => {
   try {
     const [todos] = await db.query("SELECT * FROM todos");
@@ -97,3 +96,31 @@ export const getTodosHandler = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+// export const createTodo = async (req, res) => {
+//   try {
+//     const { title, description } = req.body;
+//     if ((title == "")) throw new Error("title empty");
+//     const [result] = await db.query(
+//       "INSERT INTO todos (title, description) VALUES (?, ?)",
+//       [title, description],
+//     );
+//     if(!result){throw new Error("unable to create todo")}
+//     return res.status(200).json({
+//         sucess:true,
+//         messege:"todo created sucessfully",
+//         data:result,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({
+//         sucess:false,
+//         messege:"failed",
+//     });
+//   }
+// };
