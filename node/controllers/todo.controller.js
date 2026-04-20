@@ -45,12 +45,12 @@ export const updateTodoHandler = async (req, res) => {
       messsage: "todo updated successfully",
       data: result,
     });
-  } catch (error) {
-    console.log("error");
-    console.error(error);
+} catch (error) {
+    console.error("Error in updateTodoHandler:", error);
     return res.status(500).json({
-      success: true,
-      messsage: "todo updated successfully",
+      success: false,
+      message: "Error while updating todo",
+      error: error.message
     });
   }
 };
