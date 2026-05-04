@@ -57,7 +57,7 @@ console.log(result);
     const user = result[0];
     console.log(user);
 
-    const hashedPassword = user.password; //passwrord is in hashed ->singup hashed
+    const hashedPassword = user.password; //passwrord is in hashed singup hashed
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -65,7 +65,7 @@ console.log(result);
     }
     const token = jwt.sign(
       { id: user.id, email: user.email }, // payload
-      "process.env.JWT_SECRET",             // secret key
+      "qwerty",             // secret key
       { expiresIn: "1h" }                 // expiry
     );
 
