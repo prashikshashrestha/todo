@@ -5,14 +5,14 @@ import {
   deleteTodoHandler,
   getTodosHandler
 } from "../controllers/todo.controller.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/create", createTodoHandler);
-router.put("/update/:id", updateTodoHandler);
-router.delete("/delete/:id", deleteTodoHandler);
-router.get("/get", authMiddleware,getTodosHandler);
+router.post("/create", authMiddleware, createTodoHandler);
+router.put("/update/:id", authMiddleware, updateTodoHandler);
+router.delete("/delete/:id", authMiddleware, deleteTodoHandler);
+router.get("/get", authMiddleware, getTodosHandler);
 
 export default router;
 

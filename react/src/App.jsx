@@ -12,7 +12,6 @@ import {
 import "./App.css";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-const token = localStorage.getItem("token");
 
 function Home({ todos, setTodos, user, setUser }) {
   const [search, setSearch] = useState("");
@@ -35,6 +34,7 @@ function Home({ todos, setTodos, user, setUser }) {
 
   const handleDelete = async (id) => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.delete(
         `http://localhost:3000/api/v1/todo/delete/${id}`,
         {
@@ -147,6 +147,7 @@ function AddEditTodo({ todos, getTodos }) {
 
   const handleSave = async () => {
     try {
+      const token = localStorage.getItem("token");
       if (existingTodo) {
         await axios.put(
           `http://localhost:3000/api/v1/todo/update/${id}`,
@@ -231,7 +232,8 @@ function App() {
 
   const getTodos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/v1/todo/get",{
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3000/api/v1/todo/get", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
